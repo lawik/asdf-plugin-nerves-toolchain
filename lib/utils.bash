@@ -73,8 +73,10 @@ find_target_release() {
 
 	local jq_filter=".[] | select(.version == \"$version\") | .toolchains[] | select(.toolchain.target_arch == \"$target_arch\" and .toolchain.vendor == \"$vendor\" and .toolchain.abi == \"$abi\")"
 
-	list_github_release_assets | tee |
-		jq -r "$jq_filter"
+	local results=$(list_github_release_assets)
+ 	echo "results:"
+  	echo $results
+	echo "$results" | jq -r "$jq_filter"
 }
 
 list_all_versions() {
