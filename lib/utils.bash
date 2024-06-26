@@ -94,6 +94,8 @@ download_release() {
 	# target_os="${version_parts[3]}"
 	abi="${version_parts[4]}"
 
+         echo "Tag: $version $target_arch $vendor $abi"
+
 	# target_release=$(find_target_release "$version" "$target_arch" "$vendor" "$abi" || fail "Could not find release for $version_str")
 	target_release=$(find_target_release "$version" "$target_arch" "$vendor" "$abi")
 
