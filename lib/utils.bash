@@ -50,11 +50,12 @@ echo "* Curl opts: $curl_opts"
 list_github_release_assets() {
 	echo "Curling for releases..."
 	releases=$(curl "${curl_opts[@]}" "https://api.github.com/repos/$GH_REPO/releases?per_page=100" 2>&1)
+ 	status=$?
 	echo "Releases:"
 	echo "$releases"
  
 	# shellcheck disable=SC2181
-	if [ $? -eq 0 ]; then
+	if [ $status -eq 0 ]; then
 		echo "$releases" | jq -r "$JQ_MAP_RELEASES"
 	else
 		if [[ $releases == *401 ]]; then
