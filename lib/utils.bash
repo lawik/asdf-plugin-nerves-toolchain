@@ -86,6 +86,7 @@ find_target_release() {
 }
 
 list_all_versions() {
+	echo "List all versions..."
 	list_github_release_assets | jq -r "$JQ_FILTER_VERSIONS | reverse | .[]"
 }
 
@@ -93,6 +94,8 @@ download_release() {
 	local version_str filename version target_arch vendor abi target_release url
 	version_str=$(fix_version "$1")
 	filename="$2"
+
+  	echo "Download release: $1 $2"
 
 	IFS='-' read -ra version_parts <<<"$version_str"
 
@@ -105,6 +108,7 @@ download_release() {
 	# target_release=$(find_target_release "$version" "$target_arch" "$vendor" "$abi" || fail "Could not find release for $version_str")
 	target_release=$(find_target_release "$version" "$target_arch" "$vendor" "$abi")
 
+	echo "Build URL..."
 	url=$(echo "$target_release" | jq -r '.browser_download_url')
 
 	echo "* Curl opts: ${curl_opts[@]}"
