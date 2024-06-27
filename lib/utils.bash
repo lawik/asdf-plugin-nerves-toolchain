@@ -45,7 +45,7 @@ if [ -n "$github_token" ]; then
 fi
 
 list_github_release_assets() {
-	>&2 echo "Listing: curl \"${curl_opts[@]}\" \"https://api.github.com/repos/$GH_REPO/releases?per_page=100\""
+	>&2 echo "Listing: curl ${curl_opts[@]} \"https://api.github.com/repos/$GH_REPO/releases?per_page=100\""
 	releases=$(curl "${curl_opts[@]}" "https://api.github.com/repos/$GH_REPO/releases?per_page=100" 2>&1)
 	local status=$?
 	# shellcheck disable=SC2181
