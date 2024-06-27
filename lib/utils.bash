@@ -45,7 +45,7 @@ if [ -n "$github_token" ]; then
 fi
 
 list_github_release_assets() {
-	>&2 echo "Listing..."
+	>&2 echo "Listing: curl \"${curl_opts[@]}\" \"https://api.github.com/repos/$GH_REPO/releases?per_page=100\""
 	releases=$(curl "${curl_opts[@]}" "https://api.github.com/repos/$GH_REPO/releases?per_page=100" 2>&1)
 	local status=$?
 	# shellcheck disable=SC2181
@@ -74,7 +74,7 @@ find_target_release() {
 	local vendor="$3"
 	local abi="$4"
 
-	>&2 echo "Finding..."
+	>&2 echo "Finding: $version $target_arch $vendor $abi"
 	local jq_filter=".[] | select(.version == \"$version\") | .toolchains[] | select(.toolchain.target_arch == \"$target_arch\" and .toolchain.vendor == \"$vendor\" and .toolchain.abi == \"$abi\")"
 	list_github_release_assets |
 		jq -r "$jq_filter"
