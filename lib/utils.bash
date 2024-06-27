@@ -53,8 +53,8 @@ list_github_release_assets() {
 	# shellcheck disable=SC2181
 	if [ $status -eq 0 ]; then
  		>&2 echo "Success"
-		found=$("$releases" | jq -r "$JQ_MAP_RELEASES")
-  		echo $found
+		echo "$releases" | jq -r "$JQ_MAP_RELEASES"
+  		#echo $found
     		#>&2 echo "$found"
 	else
  		>&2 echo "Failure"
