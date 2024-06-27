@@ -71,11 +71,10 @@ find_target_release() {
 	local vendor="$3"
 	local abi="$4"
 
-        echo "Find: $version $target_arch $vendor $abi"
-
 	local jq_filter=".[] | select(.version == \"$version\") | .toolchains[] | select(.toolchain.target_arch == \"$target_arch\" and .toolchain.vendor == \"$vendor\" and .toolchain.abi == \"$abi\")"
 
-	list_github_release_assets | jq -r "$jq_filter"
+	list_github_release_assets |
+		jq -r "$jq_filter"
 }
 
 list_all_versions() {
@@ -95,19 +94,12 @@ download_release() {
 	# target_os="${version_parts[3]}"
 	abi="${version_parts[4]}"
 
-         echo "Tag: $version $target_arch $vendor $abi"
-
 	# target_release=$(find_target_release "$version" "$target_arch" "$vendor" "$abi" || fail "Could not find release for $version_str")
 	target_release=$(find_target_release "$version" "$target_arch" "$vendor" "$abi")
 
-        echo "Target release:"
-	echo $target_release
 	url=$(echo "$target_release" | jq -r '.browser_download_url')
 
 	echo "* Downloading $TOOL_NAME release $version_str..."
- 	echo "* URL: $url"
-        echo "* filename: $filename"
-	echo "* curl_opts: ${curl_opts[@]}"
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
@@ -128,8 +120,6 @@ install_version() {
 	vendor="${version_parts[2]}"
 	# target_os="${version_parts[3]}"
 	abi="${version_parts[4]}"
-
-        echo "Tag: $version $target_arch $vendor $abi"
 
 	target_release=$(find_target_release "$version" "$target_arch" "$vendor" "$abi" || fail "Could not find release for $version_str")
 
