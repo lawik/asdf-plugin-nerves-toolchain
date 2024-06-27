@@ -80,6 +80,7 @@ find_target_release() {
 
 	local jq_filter=".[] | select(.version == \"$version\") | .toolchains[] | select(.toolchain.target_arch == \"$target_arch\" and .toolchain.vendor == \"$vendor\" and .toolchain.abi == \"$abi\")"
 
+	echo "Getting github release assets to filter..."
 	list_github_release_assets |
 		jq -r "$jq_filter"
 }
