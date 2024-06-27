@@ -47,9 +47,9 @@ fi
 list_github_release_assets() {
 	#echo "Listing..."
 	releases=$(curl "${curl_opts[@]}" "https://api.github.com/repos/$GH_REPO/releases?per_page=100" 2>&1)
-
+	local status=$?
 	# shellcheck disable=SC2181
-	if [ $? -eq 0 ]; then
+	if [ $status -eq 0 ]; then
  		#echo "Success: $releases"
 		echo "$releases" | jq -r "$JQ_MAP_RELEASES"
 	else
