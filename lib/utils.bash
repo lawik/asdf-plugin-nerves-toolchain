@@ -105,6 +105,7 @@ download_release() {
 	echo "* Curl opts: ${curl_opts[@]}"
  	echo "* Github token: ${github_token}"
 	echo "* Downloading $TOOL_NAME release $version_str..."
+ 	echo "curl \"${curl_opts[@]}\" -o \"$filename\" -C - \"$url\""
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
