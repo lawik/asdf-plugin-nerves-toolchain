@@ -50,10 +50,10 @@ list_github_release_assets() {
 	local status=$?
 	# shellcheck disable=SC2181
 	if [ $status -eq 0 ]; then
- 		>&2 echo "Success: $releases"
+ 		>&2 echo "Success"
 		echo "$releases" | jq -r "$JQ_MAP_RELEASES"
 	else
- 		>&2 echo "Failure: $releases"
+ 		>&2 echo "Failure"
 		if [[ $releases == *401 ]]; then
 			fail "Failed to fetch releases from GitHub.\n\n" \
 				"If you have GITHUB_API_TOKEN or GITHUB_TOKEN set, the value must be a valid GitHub API token."
