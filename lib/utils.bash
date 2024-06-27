@@ -45,15 +45,15 @@ if [ -n "$github_token" ]; then
 fi
 
 list_github_release_assets() {
-	#echo "Listing..."
+	>&2 echo "Listing..."
 	releases=$(curl "${curl_opts[@]}" "https://api.github.com/repos/$GH_REPO/releases?per_page=100" 2>&1)
 	local status=$?
 	# shellcheck disable=SC2181
 	if [ $status -eq 0 ]; then
- 		echo "Success: $releases"
+ 		>&2 echo "Success: $releases"
 		echo "$releases" | jq -r "$JQ_MAP_RELEASES"
 	else
- 		echo "Failure: $releases"
+ 		>&2 echo "Failure: $releases"
 		if [[ $releases == *401 ]]; then
 			fail "Failed to fetch releases from GitHub.\n\n" \
 				"If you have GITHUB_API_TOKEN or GITHUB_TOKEN set, the value must be a valid GitHub API token."
@@ -74,6 +74,7 @@ find_target_release() {
 	local vendor="$3"
 	local abi="$4"
 
+	>&2 echo "Finding..."
 	local jq_filter=".[] | select(.version == \"$version\") | .toolchains[] | select(.toolchain.target_arch == \"$target_arch\" and .toolchain.vendor == \"$vendor\" and .toolchain.abi == \"$abi\")"
 	list_github_release_assets |
 		jq -r "$jq_filter"
