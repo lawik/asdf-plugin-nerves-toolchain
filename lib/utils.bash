@@ -52,6 +52,8 @@ list_github_release_assets() {
 
 	# shellcheck disable=SC2181
 	if [ $? -eq 0 ]; then
+ 		echo "Releases:"
+ 		echo "$releases"
 		echo "$releases" | jq -r "$JQ_MAP_RELEASES"
 	else
 		if [[ $releases == *401 ]]; then
