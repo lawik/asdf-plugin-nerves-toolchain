@@ -38,24 +38,17 @@ fail() {
 curl_opts=(-fsSL)
 
 github_token="${GITHUB_API_TOKEN:-${GITHUB_TOKEN:-}}"
-echo "Token: $github_token"
 
 # NOTE: You might want to remove this if nerves-toolchain is not hosted on GitHub releases.
 if [ -n "$github_token" ]; then
 	curl_opts=("${curl_opts[@]}" -H "Authorization: token $github_token" -H "Accept: application/vnd.github+json")
 fi
 
-echo "* Curl opts: $curl_opts"
-
 list_github_release_assets() {
-	echo "Curling for releases..."
 	releases=$(curl "${curl_opts[@]}" "https://api.github.com/repos/$GH_REPO/releases?per_page=100" 2>&1)
- 	status=$?
-	echo "Releases:"
-	echo "$releases"
- 
+
 	# shellcheck disable=SC2181
-	if [ $status -eq 0 ]; then
+	if [ $? -eq 0 ]; then
 		echo "$releases" | jq -r "$JQ_MAP_RELEASES"
 	else
 		if [[ $releases == *401 ]]; then
@@ -80,13 +73,11 @@ find_target_release() {
 
 	local jq_filter=".[] | select(.version == \"$version\") | .toolchains[] | select(.toolchain.target_arch == \"$target_arch\" and .toolchain.vendor == \"$vendor\" and .toolchain.abi == \"$abi\")"
 
-	echo "Getting github release assets to filter..."
 	list_github_release_assets |
 		jq -r "$jq_filter"
 }
 
 list_all_versions() {
-	echo "List all versions..."
 	list_github_release_assets | jq -r "$JQ_FILTER_VERSIONS | reverse | .[]"
 }
 
@@ -94,8 +85,6 @@ download_release() {
 	local version_str filename version target_arch vendor abi target_release url
 	version_str=$(fix_version "$1")
 	filename="$2"
-
-  	echo "Download release: $1 $2"
 
 	IFS='-' read -ra version_parts <<<"$version_str"
 
@@ -108,13 +97,9 @@ download_release() {
 	# target_release=$(find_target_release "$version" "$target_arch" "$vendor" "$abi" || fail "Could not find release for $version_str")
 	target_release=$(find_target_release "$version" "$target_arch" "$vendor" "$abi")
 
-	echo "Build URL..."
 	url=$(echo "$target_release" | jq -r '.browser_download_url')
 
-	echo "* Curl opts: ${curl_opts[@]}"
- 	echo "* Github token: ${github_token}"
 	echo "* Downloading $TOOL_NAME release $version_str..."
- 	echo "curl \"${curl_opts[@]}\" -o \"$filename\" -C - \"$url\""
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
 
