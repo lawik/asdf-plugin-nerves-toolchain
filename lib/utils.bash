@@ -45,6 +45,8 @@ if [ -n "$github_token" ]; then
 	curl_opts=("${curl_opts[@]}" -H "Authorization: token $github_token" -H "Accept: application/vnd.github+json")
 fi
 
+echo "* Curl opts: $curl_opts"
+
 list_github_release_assets() {
 	releases=$(curl "${curl_opts[@]}" "https://api.github.com/repos/$GH_REPO/releases?per_page=100" 2>&1)
 
