@@ -38,6 +38,7 @@ fail() {
 curl_opts=(-fsSL)
 
 github_token="${GITHUB_API_TOKEN:-${GITHUB_TOKEN:-}}"
+echo "Token: $github_token"
 
 # NOTE: You might want to remove this if nerves-toolchain is not hosted on GitHub releases.
 if [ -n "$github_token" ]; then
