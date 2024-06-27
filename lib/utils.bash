@@ -21,6 +21,8 @@ JQ_MAP_RELEASES=$(
 EOF
 )
 
+>&2 echo "$JQ_MAP_RELEASES"
+
 JQ_FILTER_VERSIONS=$(
 	cat <<EOF
 [.[] | .version as \$version | (
@@ -53,7 +55,7 @@ list_github_release_assets() {
  		>&2 echo "Success"
 		found=$("$releases" | jq -r "$JQ_MAP_RELEASES")
   		echo $found
-    		>&2 echo "$found"
+    		#>&2 echo "$found"
 	else
  		>&2 echo "Failure"
 		if [[ $releases == *401 ]]; then
