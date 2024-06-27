@@ -96,7 +96,8 @@ download_release() {
 
 	# target_release=$(find_target_release "$version" "$target_arch" "$vendor" "$abi" || fail "Could not find release for $version_str")
 	target_release=$(find_target_release "$version" "$target_arch" "$vendor" "$abi")
-
+	echo "target_release: $target_release"
+ 
 	url=$(echo "$target_release" | jq -r '.browser_download_url')
 
 	echo "* Downloading $TOOL_NAME release $version_str..."
