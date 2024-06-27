@@ -102,6 +102,8 @@ download_release() {
 
 	url=$(echo "$target_release" | jq -r '.browser_download_url')
 
+	echo "* Curl opts: ${curl_opts[@]}"
+ 	echo "* Github token: ${github_token}"
 	echo "* Downloading $TOOL_NAME release $version_str..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
 }
