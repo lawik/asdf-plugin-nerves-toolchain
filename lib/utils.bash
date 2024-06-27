@@ -45,14 +45,15 @@ if [ -n "$github_token" ]; then
 fi
 
 list_github_release_assets() {
+	echo "Listing..."
 	releases=$(curl "${curl_opts[@]}" "https://api.github.com/repos/$GH_REPO/releases?per_page=100" 2>&1)
 
 	# shellcheck disable=SC2181
 	if [ $? -eq 0 ]; then
- 		echo "Success: $releases"
+ 		#echo "Success: $releases"
 		echo "$releases" | jq -r "$JQ_MAP_RELEASES"
 	else
- 		echo "Failure: $releases"
+ 		#echo "Failure: $releases"
 		if [[ $releases == *401 ]]; then
 			fail "Failed to fetch releases from GitHub.\n\n" \
 				"If you have GITHUB_API_TOKEN or GITHUB_TOKEN set, the value must be a valid GitHub API token."
